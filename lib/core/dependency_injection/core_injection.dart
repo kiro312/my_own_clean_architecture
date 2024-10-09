@@ -6,20 +6,29 @@ import 'package:my_own_clean_architecture/core/network/dio_configuration/dio_con
 import 'package:my_own_clean_architecture/core/network/network_info/network_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void registerCoreDependencies(GetIt getIt) {
+Future<void> registerCoreDependencies(GetIt getIt) async {
   // Dio
-  getIt.registerLazySingleton<Dio>(() => DioConfiguration.getDio());
+  getIt.registerSingleton<Dio>(DioConfiguration.getDio());
 
   // DataConnectionChecker
-  getIt.registerLazySingleton<DataConnectionChecker>(
-      () => DataConnectionChecker());
-  getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfo(getIt()));
+  getIt.registerSingleton<DataConnectionChecker>(
+    DataConnectionChecker(),
+  );
 
-  // SharedPreferences
-  getIt.registerLazySingletonAsync<SharedPreferences>(
+  // NetworkInfo depends on DataConnectionChecker
+  getIt.registerSingleton<NetworkInfo>(
+    NetworkInfo(getIt<DataConnectionChecker>()),
+  );
+
+  // SharedPreferences registered asynchronously
+  getIt.registerSingletonAsync<SharedPreferences>(
     () async => await SharedPreferences.getInstance(),
   );
 
-  // CacheHelper
-  getIt.registerLazySingleton<CacheHelper>(() => CacheHelper(getIt()));
+  await getIt.isReady<SharedPreferences>(); // Ensure SharedPreferences is ready
+
+  // CacheHelper depends on SharedPreferences
+  getIt.registerSingleton<CacheHelper>(
+    CacheHelper(getIt<SharedPreferences>()),
+  );
 }

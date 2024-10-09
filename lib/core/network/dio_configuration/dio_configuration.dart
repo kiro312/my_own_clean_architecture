@@ -16,8 +16,7 @@ class DioConfiguration {
       dio = Dio();
 
       // TODO: Add the base URL here
-      dio!.options.baseUrl = '';
-
+      dio!.options.baseUrl = 'http://192.168.1.7:8080/api/';
       dio!
         ..options.connectTimeout = timeOut
         ..options.receiveTimeout = timeOut;
@@ -51,6 +50,8 @@ class DioConfiguration {
         requestBody: true,
         requestHeader: true,
         responseHeader: true,
+        responseBody: true,
+        error: true,
       ),
     );
   }

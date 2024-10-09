@@ -28,10 +28,9 @@
         - Presentation
             - pages
             - widgets
-            - state
 
         - Business
-            - usecases
+            - state
             - entities
 
         - Data

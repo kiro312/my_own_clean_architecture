@@ -1,9 +1,12 @@
 import 'package:get_it/get_it.dart';
 
+import 'all_books_injection.dart';
 import 'core_injection.dart';
 
 final getIt = GetIt.instance;
 
-void setupDependencies() {
-  registerCoreDependencies(getIt);
+Future<void> setupDependencies() async {
+  await registerCoreDependencies(getIt);
+
+  await registerAllBooksDependencies(getIt);
 }

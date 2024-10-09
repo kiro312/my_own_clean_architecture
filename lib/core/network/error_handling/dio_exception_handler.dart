@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'error_model.dart';
 import 'exceptions.dart';
 
-void handleDioException(DioException e) {
+dynamic handleDioException(DioException e) {
   String? dioMessage = e.message; // Get the Dio error message
   ErrorModel errorModel;
 
