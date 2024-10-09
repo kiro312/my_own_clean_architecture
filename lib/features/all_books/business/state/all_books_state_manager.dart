@@ -22,4 +22,8 @@ class AllBooksStateManager {
       Provider.of<AllBooksProvider>(context, listen: false).getAllBooks();
     }
   }
+
+  static String getFailureMessage(BuildContext context) {
+    return Provider.of<AllBooksProvider>(context, listen: true).failureMessage;
+  }
 }

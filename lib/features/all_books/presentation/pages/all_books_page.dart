@@ -31,7 +31,7 @@ class _AllBooksPageState extends State<AllBooksPage> {
             case AppStates.success:
               return const BooksListWidget();
             case AppStates.failure:
-              return const Center(child: Text('Failed to load books'));
+              return Center(child: Text(AllBooksStateManager.getFailureMessage(context)));
             case AppStates.empty:
               return const Center(child: Text('No books available'));
             case AppStates.idle:
