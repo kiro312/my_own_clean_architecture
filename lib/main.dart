@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/dependency_injection/main_injection.dart';
+import 'features/all_authors/business/state/all_authors_provider.dart';
 import 'features/all_books/business/state/all_books_provider.dart';
 import 'features/home/home_page.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AllBooksProvider()),
+        ChangeNotifierProvider(create: (context) => AllAuthorsProvider()),
       ],
       child: const MainApp(),
     ),
