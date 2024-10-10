@@ -5,7 +5,7 @@ import 'error_model.dart';
 class ServerException implements Exception {
   final ErrorModel errorModel;
   ServerException(this.errorModel) {
-    log("My ServerException:  $errorModel");
+    log("My ServerException:  ${errorModel.toString()}");
     // Log to crashlytics or other monitoring tools
   }
 }
