@@ -1,0 +1,7 @@
+- create models
+- create (remote / local) data sources | and register them
+- create (remote / local) services | and register them
+- create/modify the repo | and register it
+- create the provider/s
+- create the sate manager 
+- create the presentation widgets
