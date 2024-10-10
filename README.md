@@ -1,5 +1,7 @@
 # My own clean architecture Project Structure
 
+## The backend of this project https://github.com/kiro312/Library-Backend.git
+
 ## lib
 
 - **core**
@@ -35,11 +37,14 @@
 
     - pages
     - widgets
-    - state
 
   - **Business**
 
-    - usecases
+    - state
+
+      - state manager
+      - providers/
+
     - entities
 
   - **Data**
@@ -49,7 +54,7 @@
         - get_user_service (for example)
       - **local**
         - cache_user_service (for example)
-    - models
+    - **models**
     - **data_source**
       - **remote**
         - remote_api_service
