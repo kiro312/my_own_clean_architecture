@@ -1,48 +1,50 @@
 import 'package:dio/dio.dart';
-import 'error_model.dart';
+
 import 'exceptions.dart';
+import 'server_error_model.dart';
 
-dynamic handleDioException(DioException e) {
-  String? dioMessage = e.message; // Get the Dio error message
-  ErrorModel errorModel;
+ServerErrorModel handleDioException(DioException e) {
+  int statusCode = e.response?.statusCode ?? 0;
+  String dioMessage = e.message ?? "No Dio Message";
+  String serverMessage =
+      e.response?.data['message'] ?? 'حدث خطأ يرجى اعادة المحاولة';
 
-  if (e.response != null) {
-    errorModel = ErrorModel.fromJson(e.response!.data, dioMessage: dioMessage);
-  } else {
-    errorModel = ErrorModel(dioMessage: dioMessage);
-  }
+  ServerErrorModel errorModel = ServerErrorModel(
+    statusCode: statusCode,
+    dioMessage: dioMessage,
+    serverMessage: serverMessage,
+  );
 
   switch (e.type) {
     case DioExceptionType.connectionError:
-      throw ConnectionErrorException(errorModel);
+      return ConnectionErrorException(errorModel).getErrorModel;
     case DioExceptionType.badCertificate:
-      throw BadCertificateException(errorModel);
+      return BadCertificateException(errorModel).getErrorModel;
     case DioExceptionType.connectionTimeout:
-      throw ConnectionTimeoutException(errorModel);
+      return ConnectionTimeoutException(errorModel).getErrorModel;
     case DioExceptionType.receiveTimeout:
-      throw ReceiveTimeoutException(errorModel);
+      return ReceiveTimeoutException(errorModel).getErrorModel;
     case DioExceptionType.sendTimeout:
-      throw SendTimeoutException(errorModel);
+      return SendTimeoutException(errorModel).getErrorModel;
     case DioExceptionType.badResponse:
       switch (e.response?.statusCode) {
         case 400:
-          throw BadResponseException(errorModel);
+          return BadResponseException(errorModel).getErrorModel;
         case 401:
-          throw UnauthorizedException(errorModel);
+          return UnauthorizedException(errorModel).getErrorModel;
         case 403:
-          throw ForbiddenException(errorModel);
+          return ForbiddenException(errorModel).getErrorModel;
         case 404:
-          throw NotFoundException(errorModel);
+          return NotFoundException(errorModel).getErrorModel;
         case 409:
-          throw CofficientException(errorModel);
+          return CofficientException(errorModel).getErrorModel;
         default:
-          throw BadResponseException(errorModel);
+          return BadResponseException(errorModel).getErrorModel;
       }
     case DioExceptionType.cancel:
-      throw CancelException(errorModel);
+      return CancelException(errorModel).getErrorModel;
     case DioExceptionType.unknown:
-      throw UnknownException(errorModel);
     default:
-      throw UnknownException(errorModel);
+      return UnknownException(errorModel).getErrorModel;
   }
 }

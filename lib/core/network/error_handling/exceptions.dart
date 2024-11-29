@@ -1,21 +1,17 @@
-import 'dart:developer';
 
-import 'error_model.dart';
+
+import 'package:my_own_clean_architecture/core/network/error_handling/log_error.dart';
+
+import 'server_error_model.dart';
 
 class ServerException implements Exception {
-  final ErrorModel errorModel;
+  final ServerErrorModel errorModel;
   ServerException(this.errorModel) {
-    log("My ServerException:  ${errorModel.toString()}");
-    // Log to crashlytics or other monitoring tools
+    String logMessage = "${runtimeType.toString()} - ${errorModel.toString()}";
+    LogError.logError(errorMessage: logMessage);
   }
-}
 
-class CacheException implements Exception {
-  final String errorMessage;
-  CacheException({required this.errorMessage}) {
-    log("My CacheException:  $errorMessage");
-    // Log to crashlytics or other monitoring tools
-  }
+  ServerErrorModel get getErrorModel => errorModel;
 }
 
 class BadCertificateException extends ServerException {

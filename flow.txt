@@ -4,5 +4,5 @@
 - create (remote / local) services | and register them
 - create/modify the repo | and register it
 - create the provider/s
-- create the sate manager 
+- create the sate manager if you need it 
 - create the presentation widgets

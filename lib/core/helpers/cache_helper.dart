@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper {
@@ -44,5 +46,22 @@ class CacheHelper {
   /// Clear all data from local storage.
   Future<bool> clearData() async {
     return await sharedPreferences.clear();
+  }
+
+  // get Token
+  Future<String> getToken() async {
+    String token = '';
+    // final jsonData = sharedPreferences.get('loginData');
+    // if (jsonData != null) {
+    //   LoginResponseModel loginData =
+    //       LoginResponseModel.fromJson(json.decode(jsonData as String));
+    //   token = loginData.data!.token!;
+    // }
+
+    return token;
+  }
+
+  void logCacheError(String message) {
+    log('Cache Error: $message');
   }
 }

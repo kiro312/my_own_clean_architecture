@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:my_own_clean_architecture/core/dependency_injection/main_injection.dart';
+import 'package:my_own_clean_architecture/core/helpers/cache_helper.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-import 'custom_dio_interceptor.dart';
 
 class DioConfiguration {
   /// private constructor
@@ -9,42 +9,41 @@ class DioConfiguration {
 
   static Dio? dio;
 
-  static Dio getDio() {
-    Duration timeOut = const Duration(seconds: 30);
+  static Dio getDio({required String dioBaseUrl}) {
+    Duration timeOut = const Duration(seconds: 20);
 
     if (dio == null) {
       dio = Dio();
-
-      // TODO: Add the base URL here
-      dio!.options.baseUrl = 'http://192.168.1.7:8080/api/';
+      dio!.options.baseUrl = dioBaseUrl;
       dio!
         ..options.connectTimeout = timeOut
         ..options.receiveTimeout = timeOut;
-      // addDioHeaders();
-      addDioInterceptors();
-      return dio!;
-    } else {
-      return dio!;
+
+      addDioInterceptors(); // Add interceptors only once
     }
+    return dio!;
   }
 
-  // static void addDioHeaders() async {
-  //   dio?.options.headers = {
-  //     'Accept': 'application/json',
-  //     'Authorization':
-  //         'Bearer ${await SharedPrefHelper.getSecuredString(SharedPrefKeys.userToken)}',
-  //   };
-  // }
-
-  // static void setTokenIntoHeaderAfterLogin(String token) {
-  //   dio?.options.headers = {
-  //     'Authorization': 'Bearer $token',
-  //   };
-  // }
-
+  // No need to add headers manually here, use interceptor instead
   static void addDioInterceptors() {
-    dio?.interceptors.add(CustomDioInterceptor());
+    dio?.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          String token = await getToken(); // Fetch token dynamically
 
+          // Add token to headers dynamically before request
+          options.headers = {
+            ...options.headers,
+            'Content-Type': 'application/json',
+            if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+          };
+
+          return handler.next(options); // Continue with the request
+        },
+      ),
+    );
+
+    // Logging interceptor for debugging
     dio?.interceptors.add(
       PrettyDioLogger(
         requestBody: true,
@@ -54,5 +53,11 @@ class DioConfiguration {
         error: true,
       ),
     );
+  }
+
+  static Future<String> getToken() async {
+    String token = '';
+    token = await getIt<CacheHelper>().getToken();
+    return token;
   }
 }

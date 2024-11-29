@@ -8,7 +8,10 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupDependencies();
+  await setupDependencies(
+    // Change the base URL to your own API URL
+    'https://api.example.com',
+  );
   runApp(
     MultiProvider(
       providers: [

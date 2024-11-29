@@ -7,8 +7,8 @@ import 'core_injection.dart';
 
 final getIt = GetIt.instance;
 
-Future<void> setupDependencies() async {
-  await registerCoreDependencies(getIt);
+Future<void> setupDependencies(String baseUrl) async {
+  await registerCoreDependencies(getIt, baseUrl);
   await getIt.isReady<SharedPreferences>();
 
   await registerAllBooksDependencies(getIt);
